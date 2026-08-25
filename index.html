@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para mi reina, Yureli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500&family=Petit+Formal+Script&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wine: #451322;
+    --wine-deep: #2c0b15;
+    --gold: #c9a227;
+    --gold-soft: #e6c979;
+    --blush: #f6e6e8;
+    --paper: #fbf3e6;
+    --charcoal: #2a1a1d;
+    --rose: #b3596b;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--wine-deep);
+    color:var(--blush);
+    font-family:'Jost', sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  h1,h2,h3{ font-family:'Playfair Display', serif; font-weight:600; margin:0; }
+  .script{ font-family:'Petit Formal Script', cursive; font-weight:400; }
+
+  section{ min-height:100vh; position:relative; display:flex; align-items:center; justify-content:center; padding:80px 24px; }
+
+  /* ---------- decorative texture ---------- */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; opacity:0.05; z-index:1;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- Section 1: Landing ---------- */
+  #landing{
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(201,162,39,0.18), transparent 55%),
+      linear-gradient(180deg, var(--wine) 0%, var(--wine-deep) 100%);
+    text-align:center;
+    flex-direction:column;
+    gap:28px;
+  }
+  .eyebrow{
+    letter-spacing:0.35em; text-transform:uppercase; font-size:12px; color:var(--gold-soft); opacity:0.85;
+  }
+  .landing-name{
+    font-size:clamp(56px, 12vw, 110px); color:var(--paper); line-height:1;
+    text-shadow:0 0 40px rgba(201,162,39,0.25);
+  }
+  .landing-sub{
+    font-size:17px; color:var(--blush); opacity:0.75; max-width:420px; margin:0 auto;
+  }
+  .begin-btn{
+    margin-top:18px; padding:16px 42px; background:transparent; border:1px solid var(--gold);
+    color:var(--gold-soft); font-family:'Jost',sans-serif; letter-spacing:0.18em; text-transform:uppercase;
+    font-size:13px; cursor:pointer; border-radius:999px; transition:all .35s ease; position:relative;
+  }
+  .begin-btn:hover, .begin-btn:focus-visible{ background:var(--gold); color:var(--wine-deep); box-shadow:0 0 30px rgba(201,162,39,0.4); }
+  .begin-btn:focus-visible{ outline:2px solid var(--gold-soft); outline-offset:4px; }
+
+  .petal-ring{ width:1px; height:70px; background:linear-gradient(var(--gold), transparent); margin:0 auto; opacity:0.6; }
+
+  /* ---------- Section 2: Banff recap ---------- */
+  #banff{
+    background:linear-gradient(180deg, var(--wine-deep), var(--wine) 60%, var(--wine-deep));
+    flex-direction:column; gap:48px;
+  }
+  .section-head{ text-align:center; max-width:600px; }
+  .section-head .eyebrow{ margin-bottom:14px; display:block; }
+  .section-head h2{ font-size:clamp(32px,5vw,48px); color:var(--paper); }
+  .section-head p{ margin-top:16px; opacity:0.75; line-height:1.7; font-size:15px; }
+
+  .photo-grid{
+    display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:18px; max-width:960px; width:100%;
+  }
+  .photo-grid .frame:nth-child(1){ grid-column:span 2; grid-row:span 2; }
+  @media (max-width: 720px){
+    .photo-grid{ grid-template-columns:repeat(2,1fr); }
+    .photo-grid .frame:nth-child(1){ grid-column:span 2; grid-row:auto; }
+  }
+
+  .frame{
+    aspect-ratio:1; border:1px solid rgba(201,162,39,0.35); border-radius:2px; position:relative;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+    background:rgba(251,243,230,0.03);
+    opacity:0; transform:translateY(24px); transition:opacity .8s ease, transform .8s ease;
+  }
+  .frame.in-view{ opacity:1; transform:translateY(0); }
+  .photo-grid .frame:nth-child(1){ min-height:100%; }
+
+  .frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .frame .placeholder{
+    display:flex; flex-direction:column; align-items:center; gap:10px; color:var(--gold-soft); opacity:0.55; padding:16px; text-align:center;
+  }
+  .frame .placeholder svg{ width:28px; height:28px; }
+  .frame .placeholder span{ font-size:11px; letter-spacing:0.08em; }
+  .frame .cap{
+    position:absolute; bottom:0; left:0; right:0; padding:10px 12px; font-size:12px;
+    background:linear-gradient(0deg, rgba(44,11,21,0.85), transparent); color:var(--blush); opacity:0.85;
+  }
+
+  /* ---------- Section 3: Letter ---------- */
+  #letter{
+    background:radial-gradient(ellipse at 50% 100%, rgba(201,162,39,0.12), transparent 60%), var(--wine-deep);
+    flex-direction:column;
+  }
+  .letter-card{
+    max-width:620px; width:100%; background:var(--paper); color:var(--charcoal);
+    padding:clamp(36px,6vw,64px); border-radius:2px; position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,0.45);
+    opacity:0; transform:translateY(30px) rotate(-0.4deg); transition:opacity 1s ease, transform 1s ease;
+  }
+  .letter-card.in-view{ opacity:1; transform:translateY(0) rotate(-0.4deg); }
+  .letter-card::before{
+    content:""; position:absolute; inset:14px; border:1px solid rgba(69,19,34,0.15); pointer-events:none;
+  }
+  .letter-greeting{ font-size:15px; letter-spacing:0.08em; text-transform:uppercase; color:var(--rose); margin-bottom:18px; }
+  .letter-body{ font-size:18px; line-height:1.85; font-weight:300; }
+  .letter-body p{ margin:0 0 18px; }
+  .letter-body .edit-hint{
+    display:block; font-size:12px; font-family:'Jost',sans-serif; color:var(--rose); opacity:0.7; margin-top:6px;
+  }
+  .letter-sign{ margin-top:30px; text-align:right; }
+  .letter-sign .script{ font-size:34px; color:var(--wine); }
+
+  /* ---------- Section 4: Reveal ---------- */
+  #reveal{
+    background:linear-gradient(180deg, var(--wine-deep), var(--wine));
+    flex-direction:column; gap:36px; text-align:center;
+  }
+  .envelope-wrap{ perspective:1400px; width:min(340px, 80vw); }
+  .envelope{
+    position:relative; width:100%; aspect-ratio:16/10; cursor:pointer;
+  }
+  .envelope-body{
+    position:absolute; inset:0; background:linear-gradient(135deg, #f1e2cf, var(--paper));
+    border-radius:6px; box-shadow:0 20px 60px rgba(0,0,0,0.45);
+  }
+  .envelope-flap{
+    position:absolute; top:0; left:0; right:0; height:55%;
+    background:linear-gradient(135deg, #efd9bd, #e4c79a);
+    clip-path:polygon(0 0, 100% 0, 50% 90%);
+    transform-origin:top; transition:transform .9s cubic-bezier(.6,-0.1,.3,1.3);
+    border-radius:6px 6px 0 0;
+    z-index:3;
+  }
+  .envelope.open .envelope-flap{ transform:rotateX(180deg); }
+  .seal{
+    position:absolute; top:38%; left:50%; transform:translate(-50%,-50%);
+    width:52px; height:52px; border-radius:50%; background:radial-gradient(circle at 35% 30%, var(--gold-soft), var(--gold) 60%, #8f6f16);
+    display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:22px; color:var(--wine-deep);
+    box-shadow:0 6px 14px rgba(0,0,0,0.35); z-index:4; transition:opacity .4s ease, transform .4s ease;
+  }
+  .envelope.open .seal{ opacity:0; transform:translate(-50%,-50%) scale(0.4); }
+  .ticket-peek{
+    position:absolute; left:8%; right:8%; bottom:6%; height:70%; background:var(--wine);
+    border-radius:4px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:var(--gold-soft); gap:6px; opacity:0; transform:translateY(14px); transition:opacity .6s ease .35s, transform .6s ease .35s;
+    z-index:2; padding:14px; text-align:center;
+  }
+  .envelope.open .ticket-peek{ opacity:1; transform:translateY(0); }
+  .ticket-peek strong{ font-family:'Playfair Display',serif; font-size:15px; letter-spacing:0.03em; }
+  .ticket-peek span{ font-size:11px; letter-spacing:0.12em; text-transform:uppercase; opacity:0.8; }
+
+  .reveal-caption{ font-size:13px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold-soft); opacity:0.8; }
+  #reveal h2{ font-size:clamp(28px,5vw,42px); color:var(--paper); max-width:520px; }
+
+  .footer-note{ opacity:0.5; font-size:12px; letter-spacing:0.05em; }
+
+  /* scroll cue */
+  .scroll-cue{ position:absolute; bottom:28px; left:50%; transform:translateX(-50%); opacity:0.6; }
+  .scroll-cue .stick{ width:1px; height:40px; background:var(--gold-soft); margin:0 auto; animation:cueMove 1.8s ease-in-out infinite; }
+  @keyframes cueMove{ 0%,100%{ transform:scaleY(1); opacity:0.5;} 50%{ transform:scaleY(0.6); opacity:1; } }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<!-- =========================================================
+  EDIT GUIDE FOR YASSER
+  1. Photos: replace each <div class="placeholder">...</div> block
+     inside #banff with <img src="your-photo.jpg" alt="..."> 
+     (keep the surrounding .frame div and .cap caption).
+  2. Captions: change the text inside each <div class="cap">.
+  3. Letter: replace the paragraph text inside #letter .letter-body
+     with your own message. Delete the <span class="edit-hint"> lines.
+  4. Ticket details: update date/venue inside .ticket-peek.
+  5. To host: upload this single file to any static host (GitHub
+     Pages, Netlify drop, etc.) or just send the .html file directly —
+     she can open it in any browser.
+========================================================= -->
+
+<!-- SECTION 1: LANDING -->
+<section id="landing">
+  <span class="eyebrow">a little journey, just for you</span>
+  <h1 class="landing-name script">Para mi reina, Yureli</h1>
+  <p class="landing-sub">Feliz cumpleaños, mi amorcito. Before anything else — come with me for a minute.</p>
+  <div class="petal-ring"></div>
+  <button class="begin-btn" id="beginBtn">Comenzar</button>
+</section>
+
+<!-- SECTION 2: BANFF RECAP -->
+<section id="banff">
+  <div class="section-head">
+    <span class="eyebrow">Chapter One</span>
+    <h2>Our Escape to Banff</h2>
+    <p>A few days ago, the mountains gave us a preview of your birthday - cold air, green pine trees, and you smiling at the sight of every God made painting. Here's a little of what we saw.</p>
+  </div>
+  <div class="photo-grid" id="photoGrid">
+    <div class="frame">
+      <img src="images/lake-moraine.jpg" alt="...">
+      <div class="cap">Lake Moraine, our first adventurous day</div>
+    </div>
+    <div class="frame">
+      <img src="images/canoe.jpeg" alt="...">
+      <div class="cap">The canoe trip, where you made little Yureli happy</div>
+    </div>
+    <div class="frame">
+      <img src="images/gandola.jpg" alt="...">
+      <div class="cap">Where we felt like we wereon top of the world</div>
+    </div>
+    <div class="frame">
+      <img src="images/emerald-lake.jpeg" alt="...">
+      <div class="cap">Bow Lake, "Are you a family -_-?"</div>
+    </div>
+    <div class="frame">
+      <img src="images/glacier.jpg" alt="...">
+      <div class="cap">That smile that's brighter than the Columbia Icefield Glacier</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: LETTER -->
+<section id="letter">
+  <div class="letter-card">
+    <div class="letter-greeting">Mi amorcito,</div>
+    <div class="letter-body">
+      <p>
+        <div>Happy 29th birthday! I love you more than words can say. I know this past year has been a rollercoaster, but through it all, you've never stopped being the most amazing person I know. I'm so proud of you for juggling school, work, and being a wifey, and so grateful to have you by my side.</div>
+        <div>Our trip to Banff was a reminder of how much I love experiencing life with you. From the breathtaking views to the quiet moments on the lake, every second was better because you were there.</div>
+        <div>I can't wait to see what the next year brings for us, and I promise to make every moment as special as you are to me.</div>
+      </p>
+    </div>
+    <div class="letter-sign">
+      <div class="script">Yasser</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: REVEAL -->
+<section id="reveal">
+  <span class="eyebrow reveal-caption">One last thing</span>
+  <h2>I saved the best part for last.</h2>
+  <div class="envelope-wrap">
+    <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Open your gift">
+      <div class="envelope-body"></div>
+      <div class="ticket-peek">
+        <span>Karol G — Viajando Por El Mundo</span>
+        <strong>Thu, Oct 15 @ 7:00 PM</strong>
+        <span>AT&T Stadium</span>
+      </div>
+      <div class="envelope-flap"></div>
+      <div class="seal">Y</div>
+    </div>
+  </div>
+  <p class="reveal-caption" id="revealHint">tap the envelope</p>
+  <p class="footer-note">Con todo mi amor, feliz cumpleaños mi reina.</p>
+</section>
+
+<script>
+  document.getElementById('beginBtn').addEventListener('click', () => {
+    document.getElementById('banff').scrollIntoView({behavior:'smooth'});
+  });
+
+  // scroll reveal for photo frames + letter
+  const revealTargets = document.querySelectorAll('.frame, .letter-card');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.2});
+  revealTargets.forEach(t=>io.observe(t));
+
+  // envelope open/close
+  const envelope = document.getElementById('envelope');
+  const hint = document.getElementById('revealHint');
+  function toggleEnvelope(){
+    const isOpen = envelope.classList.toggle('open');
+    hint.textContent = isOpen ? 'WE\'RE GOING!!' : 'tap the envelope';
+  }
+  envelope.addEventListener('click', toggleEnvelope);
+  envelope.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggleEnvelope(); }
+  });
+</script>
+
+</body>
+</html>
